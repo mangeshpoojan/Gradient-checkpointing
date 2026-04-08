@@ -4,11 +4,13 @@ A CUDA implementation of a multi-layer perceptron (MLP) forward pass using share
 
 ## Overview
 
-The program runs a 4-layer MLP forward pass on a batch of inputs entirely on the GPU. The batch is split across 4 CUDA streams so that each stream processes an independent chunk in parallel.
+The program runs an MLP forward pass on a batch of inputs entirely on the GPU. The batch is split across multiple CUDA streams so that each stream processes an independent chunk in parallel.
 
-**Architecture:**
+The number of layers is **dynamic** — controlled by the `LAYERS` compile-time constant. Changing `LAYERS` automatically adjusts the depth of the network without any other code changes.
+
+**Architecture (default, `LAYERS=4`):**
 - Input layer: 32 → 32 (hidden)
-- Hidden layers: 32 → 32 × 2
+- Hidden layers: 32 → 32 × (`LAYERS` − 2)
 - Output layer: 32 → 32
 - Activation: ReLU on all hidden layers, none on output
 
@@ -31,11 +33,13 @@ Applies ReLU activation in-place on a flat array.
 | `INPUT_VEC` | 32 | Input feature size |
 | `OUTPUT_VEC` | 32 | Output size |
 | `N` | 32 | Hidden layer size |
-| `LAYERS` | 4 | Number of layers |
+| `LAYERS` | 4 | **Number of layers (dynamic)** — change to any value ≥ 2 to adjust network depth |
 | `STREAMS` | 4 | Number of CUDA streams |
 | `BLOCK_SIZE` | 32 | CUDA thread block tile size |
+| `LEARNING_RATE` | 0.001 | Learning rate (reserved for future use) |
 
-`BATCH_SIZE` must be divisible by `STREAMS`.
+- `BATCH_SIZE` must be divisible by `STREAMS`.
+- `LAYERS` must be ≥ 2 (at least one input and one output layer).
 
 ## Build & Run
 
