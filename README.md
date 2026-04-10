@@ -1,4 +1,4 @@
-# PA3 — CUDA MLP Forward Pass with Multi-Stream Execution
+# CUDA MLP Forward Pass with Multi-Stream Execution
 
 A CUDA implementation of a multi-layer perceptron (MLP) forward pass using shared memory tiled matrix multiplication and multiple CUDA streams for parallel batch processing.
 
